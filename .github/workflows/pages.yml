@@ -1,0 +1,67 @@
+name: Pages
+
+# Vitrinin web surumunu `gh-pages` dalina yayinlar.
+#
+# Neden `actions/deploy-pages` degil: o yol Pages'in depo ayarlarinda onceden
+# acilmis olmasini istiyor ve `configure-pages`in `enablement` secenegi
+# varsayilan `GITHUB_TOKEN` ile calismiyor. `gh-pages` dalina itmek yalnizca
+# `contents: write` istiyor, elle ayar gerektirmiyor. (Ayni yol Muiget ve
+# Muivly depolarinda da kullaniliyor.)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.ts'
+      - 'tsconfig.json'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  yayinla:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # VITRIN=1 -> vite.config.ts base'i "/MuiLabs/" yapiyor. Bu olmadan
+      # Pages'te butun varliklar 404 olur (depo adi alt yol oluyor).
+      - name: Vitrin bundle'ini derle
+        run: npm run build
+        env:
+          VITRIN: '1'
+
+      - name: gh-pages dalina it
+        run: |
+          # Detay sayfasi var ama adres hash'te (#/uygulama/muiget), yani
+          # sunucuya hicbir zaman bilinmeyen bir yol gitmiyor: 404.html'e
+          # kopya koymaya gerek yok. Bkz. src/lib/route.ts.
+          # Jekyll devre disi: duz statik dosyalar yayinlaniyor.
+          touch dist/.nojekyll
+          cd dist
+          git init -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Pages yayini: ${{ github.sha }}"
+          # Dal tamamen uretilmis icerik; gecmisi tutmanin anlami yok.
+          git push --force \
+            "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
+            gh-pages

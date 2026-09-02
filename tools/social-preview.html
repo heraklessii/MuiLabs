@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <title>MuiLabs — sosyal önizleme</title>
+
+    <!--
+      public/social-preview.png'in kaynağı. Hem GitHub'ın depo önizlemesi
+      (Settings → General → Social preview) hem de sayfanın og:image'i bu
+      dosyadan üretiliyor; ikisi de raster istiyor, SVG kabul etmiyorlar.
+
+      Yeniden üretmek için (depo kökünden):
+
+        "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" ^
+          --headless --disable-gpu --hide-scrollbars ^
+          --screenshot=public\social-preview.png --window-size=1280,640 ^
+          tools\social-preview.html
+
+      Kaynağı depoda tutmanın sebebi Muivly'dekiyle aynı: içindeki sayı
+      doğruluğunu yitirdiğinde (yeni bir Mui ürünü eklendiğinde) kart yeniden
+      üretilebilsin. Kimsenin yeniden üretemediği bir önizleme görseli, yavaş
+      yavaş yalan söylemeye başlayan bir önizleme görselidir.
+
+      Yazı tipi src/'den okunuyor — vitrinle aynı Outfit dosyaları. latin-ext
+      alt kümesi Türkçe için şart (ğ ş İ ı).
+    -->
+
+    <style>
+      @font-face {
+        font-family: 'Outfit';
+        font-style: normal;
+        font-weight: 100 900;
+        src: url('../src/assets/fonts/outfit-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+2212;
+      }
+
+      @font-face {
+        font-family: 'Outfit';
+        font-style: normal;
+        font-weight: 100 900;
+        src: url('../src/assets/fonts/outfit-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+1E00-1E9F, U+2113;
+      }
+
+      :root {
+        --bg: #0f1115;
+        --text: #e8eaed;
+        --text-muted: #8b93a3;
+        --accent: #2dd4bf;
+        --border: #262b35;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      html,
+      body {
+        width: 1280px;
+        height: 640px;
+        overflow: hidden;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 74px 88px;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Outfit', 'Segoe UI', system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+
+        /* Akışta düz bir dikdörtgen olmasın diye sol üstten çok sessiz bir
+           teal yıkama — Muivly kartıyla aynı el. */
+        background-image: radial-gradient(
+          900px 500px at 12% -10%,
+          rgb(45 212 191 / 13%),
+          transparent 70%
+        );
+      }
+
+      .wordmark {
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+
+      .wordmark b {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      h1 {
+        font-size: 76px;
+        font-weight: 700;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        max-width: 17ch;
+      }
+
+      h1 em {
+        font-style: normal;
+        color: var(--accent);
+      }
+
+      p.lede {
+        margin-top: 22px;
+        font-size: 27px;
+        line-height: 1.45;
+        color: var(--text-muted);
+        max-width: 34ch;
+      }
+
+      .figures {
+        display: flex;
+        gap: 64px;
+        align-items: flex-end;
+      }
+
+      .figure .value {
+        font-size: 44px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--accent);
+        font-variant-numeric: tabular-nums;
+        line-height: 1.1;
+      }
+
+      .figure .label {
+        margin-top: 4px;
+        font-size: 19px;
+        color: var(--text-muted);
+        line-height: 1.35;
+      }
+
+      .figures .rule {
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+        margin-bottom: 16px;
+      }
+
+      .badge {
+        font-size: 19px;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <p class="wordmark">Mui<b>Labs</b></p>
+    </div>
+
+    <div>
+      <h1>Bütün Mui uygulamaları, <em>tek yerde</em>.</h1>
+      <p class="lede">
+        Sürümler her açılışta doğrudan GitHub'dan okunuyor. Platformun algılanır, doğru dosya
+        iner.
+      </p>
+    </div>
+
+    <div class="figures">
+      <div class="figure">
+        <!-- apps.config.ts'teki kayıt sayısı. Ürün eklenince bu kart
+             yeniden üretilmeli. -->
+        <div class="value">5</div>
+        <div class="label">uygulama,<br />tek vitrinde</div>
+      </div>
+      <div class="figure">
+        <div class="value">0</div>
+        <div class="label">hesap, telemetri,<br />bekletilmiş sürüm verisi</div>
+      </div>
+      <div class="rule"></div>
+      <div class="badge">Tauri · React · Apache-2.0</div>
+    </div>
+  </body>
+</html>

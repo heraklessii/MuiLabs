@@ -1,0 +1,979 @@
+/*
+ * ============================================================================
+ * MUILABS — arayüz tasarım sistemi
+ * ============================================================================
+ *
+ * Jetonlar Mui ailesinden birebir geliyor (kanonik kaynak:
+ * ../Muiget/src/styles.css): teal vurgu (#2dd4bf), koyu zemin (#0f1115),
+ * Outfit yazı tipi. MuiLabs bir vitrin olduğu için Muiget'in kontrol/liste
+ * jetonlarını değil, yalnız renk + ölçek + tipografi katmanını devralıyor;
+ * üstüne kart ızgarasına özel birkaç jeton ekliyor.
+ *
+ * Kural: bileşen kodunda ASLA renk/ölçü sabiti yok. Hepsi buradan.
+ */
+
+/* ---------------------------------------------------------------------------
+ * Font — Outfit
+ *
+ * Dosyalar GÖMÜLÜ, CDN yok. İki sebep: Tauri sürümü çevrimdışı açılmalı, ve
+ * vitrin sürümünde Google Fonts'a giden bir istek kullanıcıyı üçüncü tarafa
+ * bildirmek olurdu. `latin-ext` alt kümesi Türkçe için şart (ğ ş İ ı Ş Ğ).
+ * ------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  src: url('./assets/fonts/outfit-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  src: url('./assets/fonts/outfit-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308,
+    U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113,
+    U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ---------------------------------------------------------------------------
+ * Renk jetonları
+ * ------------------------------------------------------------------------- */
+
+:root,
+:root[data-theme='dark'] {
+  --bg: #0f1115;
+  --bg-panel: #181b22;
+  --bg-elevated: #20242d;
+  --bg-sunken: #0b0d11;
+  --border: #262b35;
+  --border-strong: #333a47;
+  --text: #e8eaed;
+  --text-muted: #8b93a3;
+
+  --accent: #2dd4bf;
+  --accent-strong: #5eead4;
+  --accent-soft: rgb(45 212 191 / 12%);
+  --accent-line: rgb(45 212 191 / 34%);
+  /* Teal AÇIK bir renk: üstündeki yazı koyu olmak zorunda. */
+  --on-accent: #04211d;
+
+  --error: #ff7a6b;
+  --warning: #fbbf24;
+  --warning-soft: rgb(251 191 36 / 12%);
+  --warning-line: rgb(251 191 36 / 30%);
+
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 40%);
+  --shadow-2: 0 8px 24px -6px rgb(0 0 0 / 60%);
+
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #eef1f5;
+  --bg-panel: #ffffff;
+  --bg-elevated: #f2f4f8;
+  --bg-sunken: #e7eaf0;
+  --border: #dde1e9;
+  --border-strong: #c3c9d4;
+  --text: #12151a;
+  --text-muted: #5d6675;
+
+  /* Aynı teal açık zeminde okunmuyor; doygun/koyu ucu (teal-600). */
+  --accent: #0d9488;
+  --accent-strong: #0f766e;
+  --accent-soft: rgb(13 148 136 / 10%);
+  --accent-line: rgb(13 148 136 / 30%);
+  --on-accent: #ffffff;
+
+  --error: #c0392b;
+  --warning: #b45309;
+  --warning-soft: rgb(180 83 9 / 10%);
+  --warning-line: rgb(180 83 9 / 28%);
+
+  --shadow-1: 0 1px 2px rgb(18 21 26 / 8%);
+  --shadow-2: 0 8px 24px -6px rgb(18 21 26 / 14%);
+
+  color-scheme: light;
+}
+
+/* ---------------------------------------------------------------------------
+ * Ölçek
+ * ------------------------------------------------------------------------- */
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 22px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  --font-ui: 'Outfit', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
+
+  --font-xs: 11px;
+  --font-sm: 12px;
+  --font-md: 13px;
+  --font-lg: 15px;
+  --font-xl: 19px;
+  --font-2xl: 26px;
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  --control-height: 34px;
+
+  /* Vitrin ızgarası: kart minimum genişliği. Altı okunmuyor, üstü seyreliyor. */
+  --card-min: 280px;
+  --sayfa-max: 1180px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Taban
+ * ------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: var(--font-md);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Tauri penceresinde metin seçimi bir masaüstü uygulamasında yabancı duruyor;
+ * vitrinde ise kullanıcı metni kopyalayabilmeli. Ayrımı gövde sınıfı yapıyor
+ * (main.tsx `isTauri()` sonucuna göre ekliyor) — bileşenler bilmiyor.
+ */
+body.tauri {
+  user-select: none;
+  cursor: default;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* ---------------------------------------------------------------------------
+ * Sayfa kabuğu
+ * ------------------------------------------------------------------------- */
+
+.kabuk {
+  max-width: var(--sayfa-max);
+  margin: 0 auto;
+  padding: var(--space-7) var(--space-5) var(--space-6);
+}
+
+.ust {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-7);
+}
+
+/* Marka aynı zamanda listeye dönen bağlantı: detaydayken ikinci çıkış yolu. */
+.marka {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: inherit;
+  text-decoration: none;
+}
+
+.marka:hover {
+  text-decoration: none;
+}
+
+.marka:hover .marka-ad {
+  color: var(--accent);
+}
+
+.marka-ikon {
+  width: 44px;
+  height: 44px;
+  flex: none;
+}
+
+.marka-ad {
+  display: block;
+  font-size: var(--font-2xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  transition: color 120ms ease;
+}
+
+/*
+ * Ekranda değil, ekran okuyucuda var. Liste görünümünün h1'i marka yazısı
+ * değil "Mui uygulamaları"; detay sayfasında o rolü ürün adı üstlendiği için
+ * iki h1 çakışmasın diye görsel olarak gizleniyor.
+ */
+.gorunmez {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.marka-yazi p {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: var(--font-lg);
+}
+
+/* ---------------------------------------------------------------------------
+ * Kart ızgarası
+ * ------------------------------------------------------------------------- */
+
+.izgara {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
+  gap: var(--space-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  transition: border-color 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+}
+
+/* ---------------------------------------------------------------------------
+ * Kart önizleme bandı
+ *
+ * Her kartta aynı yükseklikte, ekran görüntüsü olsun olmasın: ızgarada bir
+ * kartın bandı olup diğerininki olmayınca bütün satır kayıyor.
+ * ------------------------------------------------------------------------- */
+
+.kart-gorsel {
+  /* Kart dolgusunu kenarlara kadar iptal edip bandı tam genişlik yapıyoruz. */
+  margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-4)) 0;
+  aspect-ratio: 16 / 9;
+  background: var(--bg-sunken);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.kart-gorsel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Arayüz görüntülerinde anlamlı olan üst kısım: araç çubuğu ve ilk satırlar. */
+  object-position: top center;
+  display: block;
+}
+
+/*
+ * Ekran görüntüsü olmayan ürün. Bilerek soyut: temsilî bir arayüz resmi
+ * koymak, göstermediğimiz bir şeyi göstermiş gibi yapmak olurdu.
+ */
+.kart-gorsel--bos {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(120% 140% at 78% 8%, var(--accent-soft), transparent 62%),
+    var(--bg-sunken);
+}
+
+.kart-gorsel--bos img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  opacity: 0.42;
+}
+
+.kart:hover:not(.kart--pasif) {
+  border-color: var(--border-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+
+/* Yakında olan ürün: gözle seçilebilir ama tıklanamaz olduğu belli olmalı. */
+.kart--pasif {
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+.kart-bas {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.kart-ikon {
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border-radius: var(--radius);
+}
+
+.kart-baslik {
+  min-width: 0;
+}
+
+.kart-ad {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.kart-ad h2 {
+  font-size: var(--font-xl);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/*
+ * "Stretched link": görünür bağlantı ürün adı ama tıklama alanı bütün kart.
+ * Kartı <a> içine almak yerine böyle yapıyoruz çünkü kartın içinde indirme
+ * butonları var — iç içe tıklanabilir öğe hem geçersiz HTML hem de ekran
+ * okuyucuda tek bir dev bağlantı demek.
+ */
+.kart-baglanti {
+  color: inherit;
+  text-decoration: none;
+}
+
+.kart-baglanti::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+}
+
+.kart:hover .kart-baglanti {
+  color: var(--accent);
+}
+
+/* Odak halkası ada sarılıyor, kartın tamamına değil: klavye kullanıcısı neyin
+   seçili olduğunu görsün. (Mutlak konumlu ::after halkanın geometrisine
+   girmiyor, o yüzden kaplama odakta da yerinde kalabiliyor.) */
+.kart-baglanti:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.kart-tagline {
+  margin: 2px 0 0;
+  color: var(--text-muted);
+  font-size: var(--font-md);
+}
+
+.kart-aciklama {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-md);
+  /* Kart yüksekliklerini hizalı tutmak için: uzun açıklama üç satırda kesilir. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/*
+ * Aksiyon bloğu kartın dibine yapışsın ki butonlar aynı hizada olsun.
+ * `position/z-index` şart: kartı kaplayan bağlantı kaplamasının ÜSTÜNDE
+ * kalmalı, yoksa indirme butonuna basmak detay sayfasını açardı.
+ */
+.kart-aksiyon {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.kart-butonlar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.kart-butonlar > * {
+  flex: 1 1 120px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Rozetler
+ * ------------------------------------------------------------------------- */
+
+.rozet {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-size: var(--font-xs);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.rozet--live {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+}
+
+.rozet--demo {
+  color: var(--warning);
+  background: var(--warning-soft);
+  border-color: var(--warning-line);
+}
+
+.rozet--coming_soon {
+  color: var(--text-muted);
+  background: var(--bg-sunken);
+  border-color: var(--border);
+}
+
+/* Ön sürüm işareti: kullanıcıya kararlı sürüm sanılarak verilmesin diye. */
+.rozet--onsurum {
+  color: var(--warning);
+  background: transparent;
+  border-color: var(--warning-line);
+  font-weight: 500;
+}
+
+.rozet-nokta {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentcolor;
+}
+
+/* ---------------------------------------------------------------------------
+ * Butonlar
+ * ------------------------------------------------------------------------- */
+
+.dugme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--font-md);
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.dugme:hover:not(:disabled) {
+  border-color: var(--accent-line);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+
+.dugme:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dugme--birincil {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.dugme--birincil:hover:not(:disabled) {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--on-accent);
+}
+
+.dugme--genis {
+  width: 100%;
+}
+
+.dugme svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Aksiyon altı bilgi satırı (sürüm, boyut, hata, diğer platformlar)
+ * ------------------------------------------------------------------------- */
+
+.bilgi {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-height: 18px;
+  color: var(--text-muted);
+  font-size: var(--font-sm);
+}
+
+.bilgi--uyari {
+  color: var(--warning);
+}
+
+.bilgi code {
+  font-family: var(--font-mono);
+  font-size: var(--font-xs);
+}
+
+.bilgi svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+
+.digerleri {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.digerleri a,
+.digerleri button {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: var(--font-sm);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.digerleri a:hover,
+.digerleri button:hover {
+  color: var(--accent);
+}
+
+/* Yükleniyor iskeleti: yanıltıcı bir "hazır" hâli göstermemek için nötr. */
+.iskelet {
+  height: var(--control-height);
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, var(--bg-sunken), var(--bg-elevated), var(--bg-sunken));
+  background-size: 200% 100%;
+  animation: kayma 1.4s ease-in-out infinite;
+}
+
+@keyframes kayma {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iskelet {
+    animation: none;
+  }
+
+  .kart:hover:not(.kart--pasif) {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * Detay sayfası
+ * ------------------------------------------------------------------------- */
+
+.geri {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: var(--font-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 120ms ease;
+}
+
+.geri:hover {
+  color: var(--accent);
+}
+
+.geri svg {
+  width: 16px;
+  height: 16px;
+}
+
+.detay-bas {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.detay-ikon {
+  width: 72px;
+  height: 72px;
+  flex: none;
+  border-radius: var(--radius-lg);
+}
+
+.detay-baslik {
+  min-width: 0;
+}
+
+.detay-baslik h1 {
+  font-size: var(--font-2xl);
+  line-height: 1.15;
+}
+
+.detay-tagline {
+  margin: var(--space-1) 0 0;
+  color: var(--text-muted);
+  font-size: var(--font-lg);
+}
+
+/*
+ * İki sütun: solda anlatı, sağda aksiyon. Aksiyon sütunu yapışkan çünkü uzun
+ * bir sürüm geçmişini okurken indirme butonunun ekrandan çıkması, kullanıcıyı
+ * indirmek için yukarı geri kaydırtıyor.
+ */
+.detay-govde {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.detay-ana {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.detay-aciklama {
+  margin: 0;
+  font-size: var(--font-lg);
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.detay-bolum h2 {
+  margin-bottom: var(--space-3);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--font-sm);
+}
+
+.ozellikler {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.ozellikler li {
+  position: relative;
+  padding-left: var(--space-5);
+  color: var(--text-muted);
+  font-size: var(--font-lg);
+  line-height: 1.5;
+}
+
+/* Madde işareti yerine küçük bir teal çentik — aile diliyle aynı. */
+.ozellikler li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.galeri {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.galeri img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-sunken);
+}
+
+.surumler {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.surumler li + li {
+  border-top: 1px solid var(--border);
+}
+
+.surum {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 0;
+  background: var(--bg-panel);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--font-md);
+  text-align: left;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.surum:hover {
+  background: var(--bg-elevated);
+}
+
+.surum-etiket {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+}
+
+.surum-etiket code {
+  font-family: var(--font-mono);
+  font-size: var(--font-sm);
+  font-weight: 600;
+}
+
+.surum-tarih {
+  color: var(--text-muted);
+  flex: 1;
+}
+
+.surum-boyut {
+  color: var(--text-muted);
+  font-size: var(--font-sm);
+  white-space: nowrap;
+}
+
+.surum svg {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: var(--text-muted);
+}
+
+.detay-yan {
+  position: sticky;
+  top: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-4);
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.detay-aksiyon {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.kunye {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--font-sm);
+}
+
+.kunye dt {
+  color: var(--text-muted);
+}
+
+.kunye dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.kunye button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.kunye button:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Alt bilgi
+ * ------------------------------------------------------------------------- */
+
+.alt {
+  margin-top: var(--space-7);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: var(--font-sm);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+/* ---------------------------------------------------------------------------
+ * Dar ekran
+ * ------------------------------------------------------------------------- */
+
+/*
+ * Detay sayfası iki sütunu ancak yan sütun daralmadan sığdığında tutuyor.
+ * Altında tek sütun ve aksiyon bloğu ÖNE alınıyor: dar ekranda indirme
+ * butonunu sürüm geçmişinin altına atmak, sayfaya gelen herkesi kaydırmaya
+ * zorlar.
+ */
+@media (max-width: 860px) {
+  .detay-govde {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+  }
+
+  .detay-yan {
+    position: static;
+    order: -1;
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --card-min: 240px;
+  }
+
+  .detay-bas {
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+  }
+
+  .detay-ikon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .detay-aciklama,
+  .ozellikler li {
+    font-size: var(--font-md);
+  }
+
+  /* Sürüm satırı dar ekranda taşıyor; boyut sütunu en az bilgi taşıyan parça. */
+  .surum-boyut {
+    display: none;
+  }
+
+  .kabuk {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  /* Marka ile tema düğmesi dar ekranda da aynı satırda kalıyor; düğmeyi alt
+     satıra atmak onu içerikten kopuk bir kontrole çeviriyordu. Sığdıran şey
+     marka yazısının sarması. */
+  .ust {
+    margin-bottom: var(--space-5);
+  }
+
+  .marka-yazi p {
+    font-size: var(--font-md);
+  }
+}

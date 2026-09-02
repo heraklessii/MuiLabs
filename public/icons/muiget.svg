@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Muiget: indirme oku. Muiget/src/components/Icons.tsx -> IconDownload
+       ile ayni yol, 24'luk izgaradan 32'ye olceklendi. -->
+  <rect width="32" height="32" rx="8" fill="#0f1115"/>
+  <g fill="none" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 4v17"/>
+    <path d="m9.5 14.5 6.5 6.5 6.5-6.5"/>
+    <path d="M5.5 26.5h21"/>
+  </g>
+</svg>

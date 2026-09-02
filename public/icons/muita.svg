@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Muita: GECICI. Urunun markasi henuz duyurulmadi, o yuzden burada bir
+       marka isareti YOK — noktalar "soylenecek bir sey var ama henuz degil"
+       demek. Teal degil, muted: karti pasif gorunumunden ayirmasin.
+       Muita duyurulunca bu dosya gercek glyph'iyle degistirilecek. -->
+  <rect width="32" height="32" rx="8" fill="#0f1115"/>
+  <rect x="1.25" y="1.25" width="29.5" height="29.5" rx="7"
+        fill="none" stroke="#262b35" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <g fill="#8b93a3">
+    <circle cx="10" cy="16" r="1.9"/>
+    <circle cx="16" cy="16" r="1.9"/>
+    <circle cx="22" cy="16" r="1.9"/>
+  </g>
+</svg>

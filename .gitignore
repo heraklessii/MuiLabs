@@ -1,0 +1,14 @@
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+src-tauri/target/
+src-tauri/gen/
+
+.DS_Store
+Thumbs.db
+*.log
+
+# tauri icon ciktilari kaynak.svg'den uretiliyor ama pakete girdikleri icin
+# depoda dururlar; yalniz derleme artiklari yok sayilir.

@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  frontend:
+    name: Tip kontrolu + web derlemesi
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # `npm run build` zaten once tsc calistiriyor; ikisini ayirmiyoruz ki
+      # CI ile gelistiricinin komutu ayni sey olsun.
+      - run: npm run build
+
+  rust:
+    name: Rust testleri
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      # Frontend cikti klasoru olmadan tauri.conf.json dogrulamasi patliyor.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: cargo test
+        working-directory: src-tauri
+        run: cargo test
