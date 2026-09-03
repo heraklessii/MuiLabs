@@ -61,9 +61,22 @@
   satırlık config değişikliği yetiyor.
 - **Sürüm notlarının metni gösterilmiyor.** Markdown ayrıştırıcı bağımlılığı
   eklemeye değmedi; her satır kendi GitHub sayfasına gidiyor.
-- **JS tarafında test altyapısı kurulmadı.** Depoda vitest/jest yok, Faz 4
-  kapsamı da değildi. `rotayiCoz` saf bir fonksiyon, ileride test yazılacaksa
-  başlanacak yer orası.
+## Faz 5 — Sertleştirme ve ilk sürüm ✅ (2026-09-03)
+
+- [x] **TS tarafına test eklendi** (`vitest`, 37 test). Rust'ın testleri vardı,
+      TypeScript'in hiç yoktu — oysa en riskli parça oradaydı: yanlış asset
+      eşleşmesi sessiz bir hata, buton çalışır ve kullanıcı çalıştıramadığı
+      bir dosya alır. `asset-match.test.ts` gerçek config desenleriyle
+      çalışıyor; Muiget'in windows deseninden `$` çıpası düşürülünce üç test
+      birden kırmızıya dönüyor (mutasyonla doğrulandı).
+- [x] **`validateApps` CI'da zorunlu.** Denetim üretimde hiç çalışmıyor,
+      geliştirmede yalnız konsola yazıyordu; kimse konsola bakmazsa bozuk bir
+      kayıt sessizce yayına gidebilirdi.
+- [x] **Masaüstü sürümü Faz 4 değişiklikleriyle çalıştırıldı.** Detay sayfası,
+      hash yönlendirme ve önizleme bantları `tauri://localhost` altında
+      doğrulandı — o zamana kadar yalnız tarayıcıda denenmişti.
+- [x] `npm run tauri build` → NSIS (2,1 MB) + MSI (2,7 MB)
+- [x] **v0.1.0 yayınlandı.**
 
 ## Yayınlanınca Buraya Dönülecek (bekleyen dış olaylar)
 - [ ] Muitoon mobil Play Store'a çıkınca → `playStoreUrl` eklenir
@@ -75,16 +88,23 @@
 
 ## Şu An Neredeyiz
 
-**Faz 0-4 bitti ve vitrin yayında:** https://heraklessii.github.io/MuiLabs/
+**Faz 0-5 bitti. Vitrin yayında, ilk sürüm çıktı.**
 
-Aynı arayüz Tauri penceresinde de çalışıyor. `npm run build`,
-`VITRIN=1 npm run build` ve `cargo test` geçiyor; CI, Pages ve release
-iş akışları depoda kurulu.
+- Web: https://heraklessii.github.io/MuiLabs/
+- Masaüstü: https://github.com/heraklessii/MuiLabs/releases/tag/v0.1.0
+
+`npm test` (37), `npm run build`, `VITRIN=1 npm run build` ve `cargo test`
+geçiyor; CI, Pages ve release iş akışları çalışır durumda.
 
 Kodda planlanmış iş kalmadı. Kalan her şey dış olay bekliyor ve hiçbiri kod
 değişikliği gerektirmiyor — config'e bir alan eklemekten ibaret (aşağıdaki
 liste). Tek istisna `allowPrerelease`: Muiget kararlı sürüme geçince
 `apps.config.ts`'ten kaldırılacak.
 
-Elde kalan tek elle iş: GitHub'ın depo önizleme görselini Settings'ten
-yüklemek (yukarıda).
+Elde kalan işler:
+
+- GitHub'ın depo önizleme görselini Settings'ten yükle (yukarıda).
+- **Kod imzalama sertifikası.** Paketler imzasız; Windows SmartScreen
+  "bilinmeyen yayıncı" uyarısı veriyor. Sürüm notlarında açıkça yazıyor ama
+  kalıcı çözüm sertifika. Muiget/Muivly'de de aynı durum — aile geneli bir
+  karar, MuiLabs'a özel değil.
