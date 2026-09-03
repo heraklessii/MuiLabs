@@ -2,11 +2,18 @@ name: Pages
 
 # Vitrinin web surumunu `gh-pages` dalina yayinlar.
 #
-# Neden `actions/deploy-pages` degil: o yol Pages'in depo ayarlarinda onceden
-# acilmis olmasini istiyor ve `configure-pages`in `enablement` secenegi
-# varsayilan `GITHUB_TOKEN` ile calismiyor. `gh-pages` dalina itmek yalnizca
-# `contents: write` istiyor, elle ayar gerektirmiyor. (Ayni yol Muiget ve
-# Muivly depolarinda da kullaniliyor.)
+# Neden `actions/deploy-pages` degil: o yol her calismada Pages ortamina
+# deploy izni istiyor ve `configure-pages`in `enablement` secenegi varsayilan
+# `GITHUB_TOKEN` ile calismiyor. `gh-pages` dalina itmek yalnizca
+# `contents: write` istiyor. (Ayni yol Muiget ve Muivly depolarinda da
+# kullaniliyor.)
+#
+# TEK SEFERLIK kurulum: depo yeni acildiginda Pages'in kaynagi `gh-pages`
+# dali olarak isaretlenmeli, yoksa bu is basariyla biter ama site yayina
+# girmez. 2026-09-03'te yapildi:
+#
+#   gh api -X POST repos/heraklessii/MuiLabs/pages \
+#     -f "source[branch]=gh-pages" -f "source[path]=/"
 on:
   push:
     branches: [main]

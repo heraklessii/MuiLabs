@@ -42,12 +42,15 @@
 - [x] Eşzamanlı istek birleştirme: detay sayfası aynı depoyu iki kez sormuyor
 - [x] Sosyal önizleme görseli — `tools/social-preview.html` → headless Edge →
       `public/social-preview.png`; og:image, twitter:card, canonical eklendi
-- [ ] Depoyu `heraklessii/MuiLabs` olarak aç, Pages'i çalıştır
-      → **İlker'in yapması gerekiyor** (GitHub hesabı işi). Depo açılınca
-      `.github/workflows/pages.yml` kendiliğinden çalışıyor, ek ayar yok.
+- [x] Depo `heraklessii/MuiLabs` olarak public açıldı, Pages çalışıyor →
+      https://heraklessii.github.io/MuiLabs/ (2026-09-03)
 - [ ] Muiget kararlı sürüme geçince `allowPrerelease`ı kaldır
       → **dış olay bekliyor.** 2026-09-03 kontrolü: v0.1.0–v0.1.5, altısı da
       hâlâ prerelease. Bayrak yerinde kalmalı.
+- [ ] GitHub'ın depo önizleme görselini yükle (Settings → General → Social
+      preview → `public/social-preview.png`) → **elle yapılacak**, REST API'si
+      yok. Sayfanın `og:image`'i zaten çalışıyor; bu yalnız GitHub depo
+      sayfasının kartı için.
 
 ### Faz 4'te bilerek yapılmayanlar
 
@@ -72,16 +75,16 @@
 
 ## Şu An Neredeyiz
 
-**Faz 0-4 bitti.** Vitrin hem tarayıcıda hem Tauri penceresinde çalışıyor,
-canlı GitHub verisi çekiyor, ürün detay sayfaları ve sosyal önizleme kartı
-hazır. `npm run build`, `VITRIN=1 npm run build` ve `cargo test` geçiyor.
+**Faz 0-4 bitti ve vitrin yayında:** https://heraklessii.github.io/MuiLabs/
 
-Kodda planlanmış iş kalmadı. Kalan iki madde koda değil dünyaya bağlı:
+Aynı arayüz Tauri penceresinde de çalışıyor. `npm run build`,
+`VITRIN=1 npm run build` ve `cargo test` geçiyor; CI, Pages ve release
+iş akışları depoda kurulu.
 
-1. **Depoyu GitHub'a aç** (İlker). Bu yapılana kadar Pages adresi yok, yani
-   `og:image` ve `canonical` etiketlerindeki
-   `https://heraklessii.github.io/MuiLabs/` adresi de henüz cevap vermiyor.
-2. **Muiget kararlı sürüme geçsin** — o zaman `allowPrerelease` kalkar.
+Kodda planlanmış iş kalmadı. Kalan her şey dış olay bekliyor ve hiçbiri kod
+değişikliği gerektirmiyor — config'e bir alan eklemekten ibaret (aşağıdaki
+liste). Tek istisna `allowPrerelease`: Muiget kararlı sürüme geçince
+`apps.config.ts`'ten kaldırılacak.
 
-Bunlar dışındaki her şey "Yayınlanınca Buraya Dönülecek" listesinde ve
-hiçbiri kod değişikliği gerektirmiyor; config'e bir alan eklemekten ibaret.
+Elde kalan tek elle iş: GitHub'ın depo önizleme görselini Settings'ten
+yüklemek (yukarıda).
