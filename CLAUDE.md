@@ -99,5 +99,15 @@ Detaylar ve şema için `docs/apps-registry.md`.
 - `src-tauri/src/` — `platform.rs` (OS), `download.rs` (indirme + güvenlik testleri),
   `lib.rs` (`open_external` + komut kaydı)
 
-Komutlar: `npm run dev` · `npm run tauri dev` · `npm run build` ·
+Testler (`vitest`, dosyalar kaynağın yanında `*.test.ts`):
+
+- `src/lib/asset-match.test.ts` — **en kritik olanı.** Gerçek config desenleri
+  ve gerçek asset adlarıyla çalışır; deseni gevşetmek (`$` çıpasını düşürmek
+  gibi) burayı düşürür. Yanlış eşleşme sessiz bir hata: buton çalışır,
+  kullanıcı çalıştıramadığı bir dosya alır.
+- `src/config/apps.config.test.ts` — `validateApps` üretimde çalışmıyor,
+  geliştirmede yalnız konsola yazıyor; denetimi zorunlu kılan yer burası.
+- `src/lib/route.test.ts`, `src/lib/github.test.ts`
+
+Komutlar: `npm run dev` · `npm run tauri dev` · `npm test` · `npm run build` ·
 `VITRIN=1 npm run build` (Pages, `/MuiLabs/` base) · `cd src-tauri && cargo test`

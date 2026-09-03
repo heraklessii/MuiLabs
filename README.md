@@ -40,6 +40,7 @@ Muiget ve Muivly açık kaynak ve ücretsizdir (Apache-2.0). Muifly ticari bir
 npm install
 npm run dev              # vitrin, http://localhost:1420
 npm run tauri dev        # masaüstü penceresi
+npm test                 # vitest
 ```
 
 Derleme:

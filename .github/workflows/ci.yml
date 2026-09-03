@@ -8,7 +8,7 @@ on:
 
 jobs:
   frontend:
-    name: Tip kontrolu + web derlemesi
+    name: Testler + tip kontrolu + web derlemesi
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,6 +17,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Testler derlemeden ONCE: asset desenleri ve config tutarliligi burada
+      # tutuluyor. `validateApps` uretimde calismiyor, gelistirmede yalniz
+      # konsola yaziyor -- yani bu is olmasa bozuk bir kayit sessizce yayina
+      # gidebilir.
+      - run: npm test
       # `npm run build` zaten once tsc calistiriyor; ikisini ayirmiyoruz ki
       # CI ile gelistiricinin komutu ayni sey olsun.
       - run: npm run build

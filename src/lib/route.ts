@@ -47,6 +47,9 @@ export function rotayiCoz(hash: string, gecerliIdler?: readonly string[]): Rota 
 /**
  * Geçerli rota. Tarayıcının ileri/geri düğmeleri `hashchange` üzerinden
  * çalışır — kendi geçmiş yığınımızı tutmuyoruz.
+ *
+ * `gecerliIdler` her render'da yeni bir dizi OLMAMALI (çağıran taraf
+ * `useMemo` ile sabitliyor); aksi hâlde efekt her render'da yeniden kurulur.
  */
 export function useRota(gecerliIdler: readonly string[]): Rota {
   const [rota, setRota] = useState<Rota>(() => rotayiCoz(location.hash, gecerliIdler));
@@ -54,12 +57,12 @@ export function useRota(gecerliIdler: readonly string[]): Rota {
   useEffect(() => {
     const dinleyici = () => setRota(rotayiCoz(location.hash, gecerliIdler));
     window.addEventListener("hashchange", dinleyici);
-    // Liste id'leri config'ten geliyor ve çalışma anında değişmiyor; yine de
-    // ilk okumadan sonra değişmiş olma ihtimaline karşı bir kez daha çözüyoruz.
+    // İlk okuma `useState` başlatıcısında yapıldı; efekt kurulana kadar adres
+    // değişmiş olabilir (React 19 StrictMode çift mount'u dâhil), o yüzden
+    // bir kez daha çözüyoruz.
     dinleyici();
     return () => window.removeEventListener("hashchange", dinleyici);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gecerliIdler.join(",")]);
+  }, [gecerliIdler]);
 
   return rota;
 }
