@@ -193,6 +193,42 @@ export const apps: MuiApp[] = [
     },
   },
   {
+    id: "muiply",
+    name: "Muiply",
+    tagline: "Codec derdi olmayan yerel medya oynatıcı",
+    description:
+      "Kod çözmeyi libmpv yapıyor: MKV, HEVC, AV1, FLAC ek codec paketi istemeden açılıyor. Klasörleri tarayan kütüphane ve çalma listeleri. Apache-2.0, ücretsiz.",
+    icon: "icons/muiply.svg",
+    status: "live",
+    // Muiply/README.md → "Ne yapıyor" bölümünden kısaltıldı.
+    highlights: [
+      "Video kendi penceresinde açılıyor; kütüphane ve listeler ikinci pencerede, istendiğinde",
+      "Klasörleri tarayıp SQLite'a yazıyor — ikinci tarama değişmemiş dosyayı hiç açmıyor",
+      "Gömülü altyazı izleri ve dosyanın yanındaki .srt / .ass dosyaları kendiliğinden",
+      "Çalma listeleri, kuyruk, tekrar ve karışık; kaldığı yerden devam (kapatılabilir)",
+      "Varsayılan oynatıcı olabiliyor: 14 video + 12 ses uzantısı işletim sistemine bildiriliyor",
+    ],
+    // Ekran görüntüsü YOK: elimizde ürünün gerçek arayüzünden, içeriği
+    // paylaşılabilir bir kare yok. Temsilî görsel koymuyoruz (bkz. Screenshot).
+    lisans: "Apache-2.0",
+    publicRepo: "https://github.com/heraklessii/Muiply",
+    distribution: {
+      type: "github_release",
+      repo: "heraklessii/Muiply",
+      // ZORUNLU: sürümler prerelease olarak yayınlanıyor (uygulama sahada
+      // geniş çapta denenmedi) ve `releases/latest` ucu o durumda 404 döner.
+      // Muiget'le aynı tuzak — bkz. docs/github-integration.md → "latest tuzağı".
+      allowPrerelease: true,
+      platformAssets: {
+        // Muiply_0.1.0_x64-setup.exe (tercih: daha küçük),
+        // Muiply_0.1.0_x64_en-US.msi
+        windows: [/_x64-setup\.exe$/i, /_x64_en-US\.msi$/i],
+        // mac/linux YOK: yapılandırmaları depoda duruyor ama o platformlarda
+        // hiç derlenmedi, dolayısıyla indirilecek bir asset de yok.
+      },
+    },
+  },
+  {
     id: "muifly",
     name: "Muifly",
     tagline: "Windows oyun performans aracı",

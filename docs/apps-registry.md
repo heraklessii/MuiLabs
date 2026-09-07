@@ -124,6 +124,7 @@ Yeni bir kare eklemek: dosyayı `public/screenshots/` altına koy, kayda
 |---|---|---|---|
 | Muiget | `heraklessii/Muiget` | public | v0.1.5 — **tümü prerelease** |
 | Muivly | `heraklessii/Muivly` | public | v0.2.0 — normal release |
+| Muiply | `heraklessii/Muiply` | public | v0.1.0 — **prerelease** |
 | Muifly | `heraklessii/Muifly` (vitrin) | public | **hiç release yok** (demo henüz çıkmadı) |
 | Muita | (private depo) | **private** | — |
 | Muitoon | GitHub'da public repo yok | — | web: https://muitoon.com |

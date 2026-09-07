@@ -77,6 +77,12 @@
       doğrulandı — o zamana kadar yalnız tarayıcıda denenmişti.
 - [x] `npm run tauri build` → NSIS (2,1 MB) + MSI (2,7 MB)
 - [x] **v0.1.0 yayınlandı.**
+- [x] **Muiply kaydı eklendi (2026-09-07).** Altıncı ürün: yerel medya
+      oynatıcı, `heraklessii/Muiply`, v0.1.0 prerelease. `allowPrerelease`
+      konuldu — Muiget'le aynı "latest tuzağı" (bkz. `apps-registry.md`).
+      Sosyal önizleme kartındaki sayı 5'ten 6'ya çekilip PNG yeniden üretildi.
+      Ekran görüntüsü YOK: ürünün arayüzünden paylaşılabilir gerçek bir kare
+      yok, temsilî görsel konmuyor.
 
 ## Yayınlanınca Buraya Dönülecek (bekleyen dış olaylar)
 - [ ] Muitoon mobil Play Store'a çıkınca → `playStoreUrl` eklenir
