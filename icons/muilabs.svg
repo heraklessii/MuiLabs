@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- MuiLabs: aile ikonu iskeleti (koyu kare + teal glyph), Mui ailesinden.
+       Glyph bir uygulama izgarasi: vitrinin isi urunleri yan yana koymak. -->
+  <rect width="32" height="32" rx="8" fill="#0f1115"/>
+  <g fill="none" stroke="#2dd4bf" stroke-width="2.4" stroke-linejoin="round">
+    <rect x="7.2" y="7.2" width="7.6" height="7.6" rx="2.2"/>
+    <rect x="17.2" y="7.2" width="7.6" height="7.6" rx="2.2"/>
+    <rect x="7.2" y="17.2" width="7.6" height="7.6" rx="2.2"/>
+  </g>
+  <rect x="17.2" y="17.2" width="7.6" height="7.6" rx="2.2" fill="#2dd4bf"/>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Muifly: site/index.html favicon'u ve src-tauri/icons/kaynak.svg ile
+       AYNI yol (yukselen cizgi + ok ucu). Ucu birlikte degisir. -->
+  <rect width="32" height="32" rx="8" fill="#0f1115"/>
+  <g fill="none" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M5 23l8-8.5 5 5L27 8"/>
+    <path d="M27 14V8h-6"/>
+  </g>
+</svg>
